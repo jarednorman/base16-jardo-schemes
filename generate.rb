@@ -2,6 +2,7 @@
 
 require 'pry'
 require 'erb'
+require 'color_math'
 
 TEMPLATE = <<~TEMPLATE.freeze
   scheme: "Jardo Brighter"
@@ -50,8 +51,22 @@ Theme = Struct.new(
   end
 end
 
+class Color
+  def initialize(h, s, l)
+    @color = ColorMath.from_hsl(h, s, l)
+  end
+
+  def to_hex
+    @color.to_hex.gsub("#", "")
+  end
+end
+
+binding.pry
+
+puts ColorMath.from_hsl(0, 33, 55).to_hex
+
 result = Theme.new(
-  base00: "000000",
+  base00: Color.new(0, 0, 0).to_hex,
   base01: "282828",
   base02: "383838",
   base03: "585858",
@@ -69,4 +84,5 @@ result = Theme.new(
   base0F: "a16946",
 ).render
 
-File.write(OUTPUT_FILENAME, result)
+puts result
+# File.write(OUTPUT_FILENAME, result)
